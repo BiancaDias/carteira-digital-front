@@ -10,7 +10,7 @@ export default function SignUpPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
-  const url = "";
+  const url = "http://localhost:5000/cadastro";
   function cadastro(e){
     e.preventDefault();
     if(password !== confirmPassword){
@@ -21,7 +21,23 @@ export default function SignUpPage() {
     axios.post(url, body)
       .then(() => navigate('/'))
       .catch((err) =>{
-        alert(err.message)
+        if(err.response.status === 409){
+          alert("e-mail já cadastrado! Por favor, faça login")
+        }
+        else if(err.response.status === 422){
+          if(err.response.data[0] == "password"){
+            alert("A senha deve ter no minino 3 caracteres")
+          }
+          else if(err.response.data[0] == "email"){
+            alert("Favor inserir um e-mail válido")
+          }
+          else{
+            alert("um erro inesperado ocorreu! Favor tentar novamente")
+          }
+        }
+        else{
+          alert("um erro inesperado ocorreu! Favor tentar novamente")
+        }
       })
   }
   return (
