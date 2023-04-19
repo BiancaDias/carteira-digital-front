@@ -8,9 +8,30 @@ export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const url = "";
+  const url = "http://localhost:5000/";;
   function login(e){
     e.preventDefault();
+    const body = {email, password};
+    axios.post(url, body)
+      .then((e) => {
+        const {token, name} = e.data;
+        localStorage.setItem("user", JSON.stringify({token, name}));
+        navigate("/home");
+      })
+      .catch((err) =>{
+        if(err.response.status === 401){
+          alert("senha incorreta");
+        }
+        else if(err.response.status === 404){
+          alert("e-mail não cadastrado");
+        }
+        else if(err.response.status === 422){
+          alert("Favor inserir um e-mail valido")
+        }
+        else{
+          alert("Um erro inesperado ocorreu! Favor tentar novamente")
+        }
+      })
   }
   return (
     <SingInContainer>
@@ -27,7 +48,6 @@ export default function SignInPage() {
         <input 
           placeholder="Senha" 
           type="password" 
-          //autocomplete="new-password" 
           id="password"
           value={password}
           onChange={e => setPassword(e.target.value)}
