@@ -1,21 +1,26 @@
 import styled from "styled-components"
 import { Link, useNavigate } from "react-router-dom";
 import MyWalletLogo from "../components/MyWalletLogo"
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { User } from "../context/UserContext";
 import axios from "axios";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { user, setUser } = useContext(User);
+
   const navigate = useNavigate();
-  const url = "http://localhost:5000/";;
+  const url = "http://localhost:5000/";
   function login(e){
     e.preventDefault();
     const body = {email, password};
     axios.post(url, body)
       .then((e) => {
         const {token, name} = e.data;
+        console.log(token)
         localStorage.setItem("user", JSON.stringify({token, name}));
+        setUser({token, name})
         navigate("/home");
       })
       .catch((err) =>{

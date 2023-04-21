@@ -1,37 +1,86 @@
 import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
+import { useContext, useEffect, useState } from "react";
+import { User } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 
 export default function HomePage() {
+
+  const navigate = useNavigate();
+  const { user, setUser } = useContext(User);
+  const [transactions, setTransactions] = useState([]);
+  const [saldo, setSaldo] = useState(0)
+  const config = {
+    headers: {
+        "Authorization": `Bearer ${user.token}`
+    }
+  }
+  function logOut(){
+    console.log(user.token)
+    const url = "http://localhost:5000/logout";
+    const body = {token: user.token}
+    axios.post(url, body)
+      .then(() => {
+        console.log("chegou aqui");
+        setUser(null);
+        navigate('/')})
+      .catch((e) => alert(e.response.status))
+  }
+
+  useEffect(()=>{
+    const url = "http://localhost:5000/transaction"
+    axios.get(url, config)
+      .then(e =>{
+        setTransactions(e.data);
+      })
+      .catch(e =>{
+        alert(e)
+      })
+  }, [])
+
+  useEffect(() => {
+    exibeSaldo();
+  }, [transactions]);
+
+  function exibeSaldo(){
+    let total = 0;
+    transactions.forEach((t) =>{
+      const valor = parseFloat(t.valor);
+      if(t.type === "saida"){
+        total -= valor;
+      }else{
+        total +=valor;
+      }
+    })
+    setSaldo(total)
+  }
   return (
     <HomeContainer>
       <Header>
-        <h1>Olá, Fulano</h1>
-        <BiExit />
+        <h1>Olá, {user.name}</h1>
+        <BiExit onClick={logOut}/>
       </Header>
 
       <TransactionsContainer>
         <ul>
-          <ListItemContainer>
-            <div>
-              <span>30/11</span>
-              <strong>Almoço mãe</strong>
-            </div>
-            <Value color={"negativo"}>120,00</Value>
-          </ListItemContainer>
-
-          <ListItemContainer>
-            <div>
-              <span>15/11</span>
-              <strong>Salário</strong>
-            </div>
-            <Value color={"positivo"}>3000,00</Value>
-          </ListItemContainer>
+          {transactions.map((transactions) => 
+            <ListItemContainer>
+              <div key = {transactions._id}>
+                <span>{transactions.dia}</span>
+                <strong>{transactions.descricao}</strong>
+              </div>
+              <Value color={transactions.type==="saida"?"negativo":"positivo"}>{parseFloat(transactions.valor).toFixed(2).replace(".", ",")}</Value>
+            </ListItemContainer>
+          )}
+          
         </ul>
 
         <article>
           <strong>Saldo</strong>
-          <Value color={"positivo"}>2880,00</Value>
+          <Value color={saldo<0?"negativo":"positivo"}>{saldo.toFixed(2).replace(".", ",")}</Value>
         </article>
       </TransactionsContainer>
 
