@@ -3,7 +3,7 @@ import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
 import { useContext, useEffect, useState } from "react";
 import { User } from "../context/UserContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 
@@ -15,28 +15,29 @@ export default function HomePage() {
   const [saldo, setSaldo] = useState(0)
   const config = {
     headers: {
-        "Authorization": `Bearer ${user.token}`
+      "Authorization": `Bearer ${user.token}`
     }
   }
-  function logOut(){
+  function logOut() {
     console.log(user.token)
     const url = "http://localhost:5000/logout";
-    const body = {token: user.token}
+    const body = { token: user.token }
     axios.post(url, body)
       .then(() => {
         console.log("chegou aqui");
         setUser(null);
-        navigate('/')})
+        navigate('/')
+      })
       .catch((e) => alert(e.response.status))
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     const url = "http://localhost:5000/transaction"
     axios.get(url, config)
-      .then(e =>{
+      .then(e => {
         setTransactions(e.data);
       })
-      .catch(e =>{
+      .catch(e => {
         alert(e)
       })
   }, [])
@@ -45,14 +46,14 @@ export default function HomePage() {
     exibeSaldo();
   }, [transactions]);
 
-  function exibeSaldo(){
+  function exibeSaldo() {
     let total = 0;
-    transactions.forEach((t) =>{
+    transactions.forEach((t) => {
       const valor = parseFloat(t.valor);
-      if(t.type === "saida"){
+      if (t.type === "saida") {
         total -= valor;
-      }else{
-        total +=valor;
+      } else {
+        total += valor;
       }
     })
     setSaldo(total)
@@ -61,39 +62,43 @@ export default function HomePage() {
     <HomeContainer>
       <Header>
         <h1>Olá, {user.name}</h1>
-        <BiExit onClick={logOut}/>
+        <BiExit onClick={logOut} />
       </Header>
 
       <TransactionsContainer>
         <ul>
-          {transactions.map((transactions) => 
+          {transactions.map((transactions) =>
             <ListItemContainer>
-              <div key = {transactions._id}>
+              <div key={transactions._id}>
                 <span>{transactions.dia}</span>
                 <strong>{transactions.descricao}</strong>
               </div>
-              <Value color={transactions.type==="saida"?"negativo":"positivo"}>{parseFloat(transactions.valor).toFixed(2).replace(".", ",")}</Value>
+              <Value color={transactions.type === "saida" ? "negativo" : "positivo"}>{parseFloat(transactions.valor).toFixed(2).replace(".", ",")}</Value>
             </ListItemContainer>
           )}
-          
+
         </ul>
 
         <article>
           <strong>Saldo</strong>
-          <Value color={saldo<0?"negativo":"positivo"}>{saldo.toFixed(2).replace(".", ",")}</Value>
+          <Value color={saldo < 0 ? "negativo" : "positivo"}>{saldo.toFixed(2).replace(".", ",")}</Value>
         </article>
       </TransactionsContainer>
 
 
       <ButtonsContainer>
-        <button>
-          <AiOutlinePlusCircle />
-          <p>Nova <br /> entrada</p>
-        </button>
-        <button>
-          <AiOutlineMinusCircle />
-          <p>Nova <br />saída</p>
-        </button>
+        <Link to={"/nova-transacao/entrada"}>
+          <button>
+            <AiOutlinePlusCircle />
+            <p>Nova <br /> entrada</p>
+          </button>
+        </Link>
+        <Link to={"/nova-transacao/saida"}>
+          <button>
+            <AiOutlineMinusCircle />
+            <p>Nova <br />saída</p>
+          </button>
+        </Link>
       </ButtonsContainer>
 
     </HomeContainer>
@@ -123,6 +128,8 @@ const TransactionsContainer = styled.article`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow-y: auto;
+  position: relative;
   article {
     display: flex;
     justify-content: space-between;   
@@ -130,6 +137,8 @@ const TransactionsContainer = styled.article`
       font-weight: 700;
       text-transform: uppercase;
     }
+    position: fixed
+    width: 100%;
   }
 `
 const ButtonsContainer = styled.section`
@@ -137,8 +146,8 @@ const ButtonsContainer = styled.section`
   margin-bottom: 0;
   display: flex;
   gap: 15px;
-  
-  button {
+
+  a {
     width: 50%;
     height: 115px;
     font-size: 22px;
@@ -146,11 +155,28 @@ const ButtonsContainer = styled.section`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    p {
-      font-size: 18px;
+    text-decoration: none;
+    color: inherit;
+    background: #A328D6;
+    border-radius: 5px;
+
+    button {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background-color: transparent;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      p {
+        font-size: 18px;
+      }
     }
   }
-`
+`;
+
+
 const Value = styled.div`
   font-size: 16px;
   text-align: right;
@@ -160,7 +186,7 @@ const ListItemContainer = styled.li`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 15px;
   color: #000000;
   margin-right: 10px;
   div span {
