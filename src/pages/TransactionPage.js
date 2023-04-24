@@ -5,6 +5,7 @@ import styled from "styled-components"
 import { User } from "../context/UserContext"
 
 export default function TransactionsPage() {
+  
   const { tipo } = useParams()
   const { user } = useContext(User);
   const [valor, setValor] = useState("");

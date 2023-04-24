@@ -8,18 +8,18 @@ import UserProvider from "./context/UserContext"
 
 export default function App() {
   return (
-    <UserProvider>
-      <PagesContainer>
-        <BrowserRouter>
+    <PagesContainer>
+      <BrowserRouter>
+        <UserProvider>
           <Routes>
             <Route path="/" element={<SignInPage />} />
             <Route path="/cadastro" element={<SignUpPage />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/nova-transacao/:tipo" element={<TransactionsPage />} />
           </Routes>
-        </BrowserRouter>
-      </PagesContainer>
-    </UserProvider>
+        </UserProvider>
+      </BrowserRouter >
+    </PagesContainer >
   )
 }
 

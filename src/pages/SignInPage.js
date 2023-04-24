@@ -8,7 +8,7 @@ import axios from "axios";
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { user, setUser } = useContext(User);
+  const { setUser } = useContext(User);
 
   const navigate = useNavigate();
   const url = `${process.env.REACT_APP_API_URL}`;

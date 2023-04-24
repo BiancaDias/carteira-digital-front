@@ -20,6 +20,7 @@ export default function HomePage() {
   }
   function logOut() {
     console.log(user.token)
+  
     const url = `${process.env.REACT_APP_API_URL}/logout`;
     const body = { token: user.token }
     axios.post(url, body)
@@ -28,10 +29,20 @@ export default function HomePage() {
         setUser(null);
         navigate('/')
       })
-      .catch((e) => alert(e.response.status))
+      .catch((e) => {
+        if(!user.token){
+          alert("Faça loguin")
+        }else{
+          alert(e.response.status)
+        }
+      })
   }
 
   useEffect(() => {
+    if(!user.token){
+      alert("Faça login")
+      return
+    }
     const url = "http://localhost:5000/transaction"
     axios.get(url, config)
       .then(e => {
@@ -137,45 +148,34 @@ const TransactionsContainer = styled.article`
       font-weight: 700;
       text-transform: uppercase;
     }
-    position: fixed
     width: 100%;
+  }
+  ul{
+    overflow-y: scroll;
+    margin-bottom: 10px;
   }
 `
 const ButtonsContainer = styled.section`
-  margin-top: 15px;
+  margin-top: 0;
   margin-bottom: 0;
   display: flex;
   gap: 15px;
-
   a {
     width: 50%;
+    button {
+    width: 100%;
     height: 115px;
     font-size: 22px;
     text-align: left;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    text-decoration: none;
-    color: inherit;
-    background: #A328D6;
-    border-radius: 5px;
-
-    button {
-      width: 100%;
-      height: 100%;
-      border: none;
-      background-color: transparent;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-
-      p {
-        font-size: 18px;
+    p {
+      font-size: 18px;
       }
     }
   }
-`;
-
+`
 
 const Value = styled.div`
   font-size: 16px;
