@@ -10,7 +10,7 @@ export default function SignUpPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
-  const url = "http://localhost:5000/cadastro";
+  const url = `${process.env.REACT_APP_API_URL}/cadastro`;
   function cadastro(e){
     e.preventDefault();
     if(password !== confirmPassword){

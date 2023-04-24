@@ -20,7 +20,7 @@ export default function HomePage() {
   }
   function logOut() {
     console.log(user.token)
-    const url = "http://localhost:5000/logout";
+    const url = `${process.env.REACT_APP_API_URL}/logout`;
     const body = { token: user.token }
     axios.post(url, body)
       .then(() => {

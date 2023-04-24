@@ -12,7 +12,7 @@ export default function TransactionsPage() {
   const navigate = useNavigate()
   function transaction(e){
     e.preventDefault();
-    const url = "http://localhost:5000/transaction"
+    const url = `${process.env.REACT_APP_API_URL}/transaction`
     const config = {
       headers: {
         "Authorization": `Bearer ${user.token}`

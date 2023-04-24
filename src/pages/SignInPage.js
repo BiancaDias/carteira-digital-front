@@ -11,7 +11,7 @@ export default function SignInPage() {
   const { user, setUser } = useContext(User);
 
   const navigate = useNavigate();
-  const url = "http://localhost:5000/";
+  const url = `${process.env.REACT_APP_API_URL}`;
   function login(e){
     e.preventDefault();
     const body = {email, password};
