@@ -27,11 +27,13 @@ export default function HomePage() {
       .then(() => {
         console.log("chegou aqui");
         setUser(null);
+        localStorage.setItem("user", JSON.stringify({}));
         navigate('/')
       })
       .catch((e) => {
         if(!user.token){
           alert("Faça loguin")
+          navigate('/')
         }else{
           alert(e.response.status)
         }
@@ -39,17 +41,17 @@ export default function HomePage() {
   }
 
   useEffect(() => {
-    if(!user.token){
-      alert("Faça login")
-      return
-    }
+    
     const url = "http://localhost:5000/transaction"
     axios.get(url, config)
       .then(e => {
         setTransactions(e.data);
       })
       .catch(e => {
-        alert(e)
+        if(!user.token){
+          alert("Faça login")
+          navigate('/')
+        }
       })
   }, [])
 
@@ -79,8 +81,8 @@ export default function HomePage() {
       <TransactionsContainer>
         <ul>
           {transactions.map((transactions) =>
-            <ListItemContainer>
-              <div key={transactions._id}>
+            <ListItemContainer key={transactions._id}>
+              <div>
                 <span>{transactions.dia}</span>
                 <strong>{transactions.descricao}</strong>
               </div>

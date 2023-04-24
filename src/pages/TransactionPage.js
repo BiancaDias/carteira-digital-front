@@ -19,10 +19,22 @@ export default function TransactionsPage() {
         "Authorization": `Bearer ${user.token}`
       }
     }
-    const body = {valor, descricao, tipo}
+    let novoValor = valor;
+    if(valor.includes(",")){
+      novoValor = valor.replace(",",".")
+    }
+    const body = {valor:novoValor, descricao, tipo}
     axios.post(url, body, config)
       .then(() => navigate("/home"))
-      .catch((e) => console.log(e.response))
+      .catch((err) =>{
+        if(err.response.status === 401 || err.response.status === 404){
+          alert("Usuario deslogado! Por favor, faça login");
+          navigate("/")
+        }
+        if(err.response.status === 422){
+          alert("O valor não é valido! Favor verificar se o valor digitado é positivo");
+        }
+      })
   }
   return (
     <TransactionsContainer>
@@ -30,7 +42,7 @@ export default function TransactionsPage() {
       <form onSubmit={transaction}>
         <input 
           placeholder="Valor" 
-          type="number"
+          type="text"
           id="valor"
           value={valor}
           onChange={e => setValor(e.target.value)}
