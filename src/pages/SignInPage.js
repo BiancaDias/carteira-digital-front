@@ -18,7 +18,6 @@ export default function SignInPage() {
     axios.post(url, body)
       .then((e) => {
         const {token, name} = e.data;
-        console.log(token)
         localStorage.setItem("user", JSON.stringify({token, name}));
         setUser({token, name})
         navigate("/home");
