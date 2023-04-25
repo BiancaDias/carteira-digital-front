@@ -69,14 +69,15 @@ export default function HomePage() {
     })
     setSaldo(total)
   }
+
   return (
     <HomeContainer>
       <Header>
         <h1>Olá, {user.name}</h1>
         <BiExit onClick={logOut} />
       </Header>
-
-      <TransactionsContainer>
+      {transactions.length!==0?<TransactionsContainer>
+        
         <ul>
           {transactions.map((transactions) =>
             <ListItemContainer key={transactions._id}>
@@ -94,7 +95,10 @@ export default function HomePage() {
           <strong>Saldo</strong>
           <Value color={saldo < 0 ? "negativo" : "positivo"}>{saldo.toFixed(2).replace(".", ",")}</Value>
         </article>
-      </TransactionsContainer>
+      </TransactionsContainer>:
+      <TransactionsContainerVazio>
+        <p>Não há registros de entrada ou saída</p>
+      </TransactionsContainerVazio>}
 
 
       <ButtonsContainer>
@@ -129,6 +133,26 @@ const Header = styled.header`
   margin-bottom: 15px;
   font-size: 26px;
   color: white;
+`
+
+const TransactionsContainerVazio = styled.article`
+  flex-grow: 1;
+  background-color: #fff;
+  color: #000;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:center;
+  p{
+    width: 180px;
+    height: 46px;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    text-align: center;
+    color: #868686;
+  }
 `
 const TransactionsContainer = styled.article`
   flex-grow: 1;
