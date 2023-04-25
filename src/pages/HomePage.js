@@ -13,6 +13,7 @@ export default function HomePage() {
   const { user, setUser } = useContext(User);
   const [transactions, setTransactions] = useState([]);
   const [saldo, setSaldo] = useState(0)
+  
   const config = {
     headers: {
       "Authorization": `Bearer ${user.token}`
