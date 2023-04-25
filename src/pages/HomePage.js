@@ -31,7 +31,6 @@ export default function HomePage() {
       })
       .catch((e) => {
         if(!user.token){
-          alert("Faça loguin")
           navigate('/')
         }else{
           alert(e.response.status)
@@ -48,7 +47,6 @@ export default function HomePage() {
       })
       .catch(e => {
         if(!user.token){
-          alert("Faça login")
           navigate('/')
         }
       })
