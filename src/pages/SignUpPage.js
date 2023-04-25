@@ -25,10 +25,10 @@ export default function SignUpPage() {
           alert("e-mail já cadastrado! Por favor, faça login")
         }
         else if(err.response.status === 422){
-          if(err.response.data[0] == "password"){
+          if(err.response.data[0].includes("password")){
             alert("A senha deve ter no minino 3 caracteres")
           }
-          else if(err.response.data[0] == "email"){
+          else if(err.response.data[0].includes("email")){
             alert("Favor inserir um e-mail válido")
           }
           else{
