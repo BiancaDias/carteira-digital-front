@@ -40,7 +40,7 @@ export default function HomePage() {
 
   useEffect(() => {
     
-    const url = "http://localhost:5000/transaction"
+    const url = `${process.env.REACT_APP_API_URL}/transaction`
     axios.get(url, config)
       .then(e => {
         setTransactions(e.data);
