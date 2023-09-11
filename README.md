@@ -13,7 +13,7 @@
   </tr>
 </table>
 
-<table>
+<table align="center">
   <tr>
     <td align="center" style="padding: 0; margin: 0;">
       <img src="src/images/4.png" width="200" alt="Imagem 5">
