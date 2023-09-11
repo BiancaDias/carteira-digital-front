@@ -31,6 +31,7 @@
 A Carteira Digital se trata de uma aplicação para registro de entrada e saída de valores, para centralizar seu controle de gastos.
 
 - [Back-end da aplicação](https://github.com/BiancaDias/carteira-digital-back)
+- [Deploy da aplicação](https://carteira-digital-front.vercel.app/)
 
 Este é um projeto em React.js. Segue abaixo as instruções de configuração:
 
